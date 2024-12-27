@@ -1,33 +1,36 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { AppList } from '../components/business/AppList';
-import { AIApplication } from '../types';
-
-const mockRecommendedApps: AIApplication[] = [
-  {
-    id: '3',
-    name: 'Writing Assistant',
-    type: 'Content',
-    description: 'AI-powered writing helper',
-  },
-  {
-    id: '4',
-    name: 'Image Generator',
-    type: 'Creative',
-    description: 'AI image generation tool',
-  },
-];
+import { useDiscoverStore } from '../store/discoverStore';
 
 export const DiscoverScreen = () => {
-  const handleSelectApp = (app: AIApplication) => {
-    console.log('Selected recommended app:', app);
-  };
+  const { 
+    filteredApplications,
+    isLoading,
+    error,
+    fetchRecommendedApplications,
+    filterByType,
+    selectedType
+  } = useDiscoverStore();
+
+  useEffect(() => {
+    fetchRecommendedApplications();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.centered]}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <AppList 
-        applications={mockRecommendedApps}
-        onSelectApp={handleSelectApp}
+        applications={filteredApplications}
+        onFilterChange={filterByType}
+        selectedType={selectedType}
       />
     </View>
   );
@@ -37,5 +40,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
