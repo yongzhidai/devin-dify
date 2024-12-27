@@ -3,6 +3,10 @@ export interface User {
   id: string;
   username: string;
   avatar?: string;
+  email?: string;
+  joinDate?: string;
+  applications?: number;
+  favorites?: number;
 }
 
 export interface AIApplication {
