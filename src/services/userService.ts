@@ -1,7 +1,6 @@
 import { User } from '../types';
 
-// Mock delay to simulate API call
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay, simulateError, ERROR_MESSAGES } from './index';
 
 // Mock user profile data
 const MOCK_USER_PROFILE: User = {
@@ -17,11 +16,26 @@ const MOCK_USER_PROFILE: User = {
 export const userService = {
   getUserProfile: async (): Promise<User> => {
     await delay(1000);
+    
+    if (simulateError()) {
+      throw new Error(ERROR_MESSAGES.SERVER);
+    }
+    
     return MOCK_USER_PROFILE;
   },
 
   updateUserProfile: async (updates: Partial<User>): Promise<User> => {
     await delay(500);
+    
+    if (simulateError()) {
+      throw new Error(ERROR_MESSAGES.SERVER);
+    }
+
+    // Simulate validation error for invalid updates
+    if (updates.username === '') {
+      throw new Error(ERROR_MESSAGES.VALIDATION);
+    }
+    
     return {
       ...MOCK_USER_PROFILE,
       ...updates

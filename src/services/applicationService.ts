@@ -1,10 +1,9 @@
 import { AIApplication } from '../types';
 
-// Mock delay to simulate API call
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { delay, simulateError, ERROR_MESSAGES } from './index';
 
 // Mock application types
-const APPLICATION_TYPES = ['chatbot', 'analysis', 'assistant', 'creative'];
+export const APPLICATION_TYPES = ['chatbot', 'analysis', 'assistant', 'creative', 'development'];
 
 // Mock applications data
 const MOCK_APPLICATIONS: AIApplication[] = [
@@ -48,11 +47,21 @@ const MOCK_APPLICATIONS: AIApplication[] = [
 export const applicationService = {
   getApplications: async (): Promise<AIApplication[]> => {
     await delay(1000);
+    
+    if (simulateError()) {
+      throw new Error(ERROR_MESSAGES.SERVER);
+    }
+    
     return MOCK_APPLICATIONS;
   },
 
   getApplicationTypes: async (): Promise<string[]> => {
     await delay(500);
+    
+    if (simulateError(0.05)) {
+      throw new Error(ERROR_MESSAGES.SERVER);
+    }
+    
     return APPLICATION_TYPES;
   }
 };
