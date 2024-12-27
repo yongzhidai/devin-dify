@@ -10,6 +10,7 @@ export interface AIApplication {
   name: string;
   type: string;
   description: string;
+  icon?: string;
 }
 
 export interface ChatMessage {
