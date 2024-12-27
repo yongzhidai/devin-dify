@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { AIApplication } from '../types';
-import { applicationService } from '../services/applicationService';
+import { applicationService, ERROR_MESSAGES } from '../services';
 
 interface ApplicationStore {
   applications: AIApplication[];

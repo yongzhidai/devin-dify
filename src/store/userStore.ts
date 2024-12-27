@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { User } from '../types';
-import { userService } from '../services/userService';
+import { userService, ERROR_MESSAGES } from '../services';
 
 interface UserStore {
   profile: User | null;

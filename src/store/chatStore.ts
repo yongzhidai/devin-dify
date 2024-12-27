@@ -1,17 +1,20 @@
 import { create } from "zustand";
 import { ChatMessage } from "../types";
-import { chatService } from "../services/chatService";
+import { chatService, ERROR_MESSAGES } from "../services";
 
 interface ChatStore {
   messages: ChatMessage[];
   isLoading: boolean;
+  error: string | null;
   sendMessage: (content: string) => Promise<void>;
   clearMessages: () => void;
+  clearError: () => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
   messages: [],
   isLoading: false,
+  error: null,
   sendMessage: async (content: string) => {
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -32,9 +35,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         isLoading: false,
       }));
     } catch (error) {
-      console.error("Failed to get AI response:", error);
-      set({ isLoading: false });
+      if (error instanceof Error) {
+        set({ error: error.message, isLoading: false });
+      } else {
+        set({ error: ERROR_MESSAGES.SERVER, isLoading: false });
+      }
     }
   },
-  clearMessages: () => set({ messages: [] }),
+  clearMessages: () => set({ messages: [], error: null }),
+  clearError: () => set({ error: null }),
 }));

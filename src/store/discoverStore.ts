@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { AIApplication } from '../types';
-import { discoverService } from '../services/discoverService';
+import { discoverService, ERROR_MESSAGES } from '../services';
 
 interface DiscoverStore {
   recommendedApplications: AIApplication[];
